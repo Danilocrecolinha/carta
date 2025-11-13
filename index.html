@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+    <!-- Container de estrelas para efeito cinematográfico -->
+    <div class="stars"></div>
+
     <div class="container">
         <div class="envelope-wrapper">
             <div class="envelope">
@@ -27,14 +30,50 @@
         </div>
     </div>
 
-    <!-- Créditos -->
     <div class="credit">Criado por Danilo</div>
+
+    <!-- Áudio -->
+    <audio id="musica" src="./musica.mp3" preload="auto"></audio>
 
     <script>
         const envelope = document.querySelector('.envelope-wrapper');
-        envelope.addEventListener('click', () => {
+        const heart = document.querySelector('.heart');
+        const musica = document.getElementById('musica');
+        const body = document.body;
+
+        // Função para abrir/fechar carta
+        function toggleFlap() {
             envelope.classList.toggle('flap');
+            body.classList.toggle('flap-active');
+
+            if (envelope.classList.contains('flap')) {
+                musica.currentTime = 0;
+                musica.play().catch(err => console.log(err));
+            } else {
+                musica.pause();
+                musica.currentTime = 0;
+            }
+        }
+
+        envelope.addEventListener('click', toggleFlap);
+        heart.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleFlap();
         });
+
+        // Gera 100 estrelas aleatórias
+        const starsContainer = document.querySelector('.stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('span');
+            star.classList.add('star');
+            star.style.top = Math.random() * 100 + 'vh';
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.width = star.style.height = (Math.random() * 2 + 1) + 'px';
+            star.style.backgroundColor = ['#fff','#aad8ff','#d8b0ff'][Math.floor(Math.random()*3)];
+            star.style.animationDelay = Math.random()*5 + 's';
+            star.style.animationDuration = (Math.random()*3 + 2) + 's';
+            starsContainer.appendChild(star);
+        }
     </script>
 </body>
 </html>
